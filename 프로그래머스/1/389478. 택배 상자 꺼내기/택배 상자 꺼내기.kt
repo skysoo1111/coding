@@ -5,7 +5,8 @@ class Solution {
     fun solution(n: Int, w: Int, num: Int): Int {
         var answer: Int = 0
         
-        val baseHeight = (n+w-1)/w - 1
+        // val baseHeight = (n+w-1)/w - 1 
+        val baseHeight = (n-1)/w
         var boxArray = Array(baseHeight + 1) {IntArray(w) {0}} // 5,3
         
         var i=0
