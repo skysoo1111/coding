@@ -5,29 +5,30 @@ class Solution {
     fun solution(id_list: Array<String>, report: Array<String>, k: Int): IntArray {
         var answer = IntArray(id_list.size)
 
-        //각 User별 신고 당한 횟수
-        val result = IntArray(id_list.size)
+        //id별 신고 당한 횟수
+        val reportedCountById = IntArray(id_list.size)
+        //중복 제거 필요
         val reportSet = report.toSet()
-        val mapOf = mutableMapOf<String, MutableList<Int>>()
+        //id별 신고한 user의 index들
+        val reportingIndexById = mutableMapOf<String, MutableList<Int>>()
         for(target in reportSet) {
             val split = target.split(" ")
             val from = split[0]
             val to = split[1]
             val toIndex = id_list.indexOf(to)
 
-            //중복 제거 필요
-            result[toIndex]++
-            mapOf.getOrPut(from) { mutableListOf() }.add(toIndex)
+            reportedCountById[toIndex]++
+            reportingIndexById.getOrPut(from) { mutableListOf() }.add(toIndex)
         }
 
-        mapOf.forEach{
+        reportingIndexById.forEach{
             val key = it.key
             val value = it.value
 
             val idIndex = id_list.indexOf(key)
 
             value.forEach {
-                if (result[it] >= k) answer[idIndex]++
+                if (reportedCountById[it] >= k) answer[idIndex]++
             }
         }
 
