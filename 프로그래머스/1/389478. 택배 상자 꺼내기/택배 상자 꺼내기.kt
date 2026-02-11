@@ -1,46 +1,35 @@
 import kotlin.*
 
 class Solution {
-    // n: 상자, w: 라인, num: 꺼내야하는 상자 번호, answer: 꺼내야하는 상자를 포함해서 몇개를 걷어내야 하는가?
     fun solution(n: Int, w: Int, num: Int): Int {
-        var answer: Int = 0
-        
-        // val baseHeight = (n+w-1)/w - 1 
+        var answer: Int = 1
         val baseHeight = (n-1)/w
-        var boxArray = Array(baseHeight + 1) {IntArray(w) {0}} // 5,3
-        
-        var i=0
-        var boxNum = 1
-        while(boxNum <= n) {
-            if(i%2==1) {
-                for(j in w-1 downTo 0) {
-                    if(boxNum > n) break
-                    boxArray[i][j] = boxNum++
-                }
+
+        val even = IntArray(w)
+        val odd = IntArray(w)
+        for (i in 1 .. w) {
+            val value = (i*2)-1
+            odd[i-1] = value
+            even[w-i] = value
+        }
+
+        val targetHeight = (num - 1) / w
+        var targetNum = num
+        for(i in targetHeight until baseHeight) {
+            var targetCol = if(targetNum%w == 0) (targetNum%w) else (targetNum%w) - 1
+            var rowSum = if (targetNum%w==0) odd[targetCol] else even[targetCol]
+            if(i%2!=0) {
+                if (targetNum + rowSum <= n) {
+                    answer++
+                    targetNum += rowSum
+                } else break
             } else {
-                for(j in 0 until w) {
-                    if(boxNum > n) break
-                    boxArray[i][j] = boxNum++
-                }
+                rowSum = if (targetNum%w==0) odd[targetCol] else even[targetCol]
+                if (targetNum + rowSum <= n) {
+                    answer++
+                    targetNum += rowSum
+                } else break
             }
-            i++
-        }
-        
-        var row = 0
-        var col = 0
-        for (i in boxArray.indices) { // 0..4
-            for (j in boxArray[i].indices) { // 0..2
-                val target = boxArray[i][j]
-                if (num == target) {
-                    row = i // 1
-                    col = j // 0
-                    break
-                }
-            }
-        }
-        
-        for(i in row..baseHeight) { // 1..4
-            if(boxArray[i][col] != 0) answer++
         }
 
         return answer
