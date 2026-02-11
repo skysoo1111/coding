@@ -16,19 +16,13 @@ class Solution {
         val targetHeight = (num - 1) / w
         var targetNum = num
         for(i in targetHeight until baseHeight) {
-            var targetCol = if(targetNum%w == 0) (targetNum%w) else (targetNum%w) - 1
-            var rowSum = if (targetNum%w==0) odd[targetCol] else even[targetCol]
-            if(i%2!=0) {
-                if (targetNum + rowSum <= n) {
-                    answer++
-                    targetNum += rowSum
-                } else break
+            val targetCol = if(targetNum%w == 0) (targetNum%w) else (targetNum%w) - 1
+            val rowSum = if (targetNum%w == 0) odd[targetCol] else even[targetCol]
+            if (targetNum + rowSum <= n) {
+                answer++
+                targetNum += rowSum
             } else {
-                rowSum = if (targetNum%w==0) odd[targetCol] else even[targetCol]
-                if (targetNum + rowSum <= n) {
-                    answer++
-                    targetNum += rowSum
-                } else break
+                break
             }
         }
 
