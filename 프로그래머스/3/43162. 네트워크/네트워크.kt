@@ -1,25 +1,25 @@
 class Solution {
-    var networks = 0
+    
     fun solution(n: Int, computers: Array<IntArray>): Int {
-        var visited = BooleanArray(n)
+        dfs(n, computers, 0)
 
-        for (i in 0 until n) {
-            if (!visited[i]) {
-                networks++
-                dfs(n, computers, visited, i)
-            }
-        }
-
-        return networks
+        return if (n-graph.size == 0) 1 else n-graph.size 
     }
+    
+    var count = 0
+    var graph = mutableMapOf<Int, MutableList<Int>>()
+    fun dfs(n: Int, computers: Array<IntArray>, depth: Int) {
+        if (n == depth + 1) {
+            return
+        }
 
-    fun dfs(n: Int, computers: Array<IntArray>, visited: BooleanArray, depth: Int) {
-        visited[depth] = true
-
-        for (i in 0 until n) {
-            if(computers[depth][i] == 1 && depth != i && !visited[i]) {
-                dfs(n, computers, visited, i)
+        for (i in computers[depth].indices) {
+            if (depth != i && computers[depth][i] == 1) {
+                graph.getOrPut(depth) { mutableListOf() }.add(i)
+                if (graph[i]?.contains(i) == null) count++
             }
         }
+
+        dfs(n, computers, depth + 1)
     }
 }
